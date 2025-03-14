@@ -5,17 +5,28 @@
 function composite( bgImg, fgImg, fgOpac, fgPos )
 {
     //alert(fgPos.x);
-    var w = bgImg.width;
-    var h = bgImg.height;
+    var w = fgImg.width;
+    var h = fgImg.height;
+    
+    var x = fgPos.x;
+    var y = fgPos.y;
     
     var data = bgImg.data;
     
     for(var i = 0; i < w; i++){
         for(var j = 0; j < h; j++){
-            for(var c = 0; c < 3; c++){
-                //data[i * j * c] = 0 //fgImg.data[i, j, c];
+            for(var c = 0; c < 4; c++){
+                xb = i+x;
+                yb = j+y;
+                if(xb >= 0 && yb >= 0 && xb < bgImg.width && yb < bgImg.height){
+                    if(c < 3){
+                        data[(4*xb) + (4*bgImg.width*yb) + c] += fgImg.data[(4*i) + (4*w*j) + c];
+                    }
+                    else {
+                        data[(4*xb) + (4*bgImg.width*yb) + c] += fgImg.data[(4*i) + (4*w*j) + c]*fgOpac;
+                    }
+                }
             }
         }
     }
-    
 }
